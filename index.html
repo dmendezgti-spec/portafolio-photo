@@ -110,9 +110,7 @@
     <section id="contacto" class="section contact">
       <div class="contact-card">
         <h2>¿Cotizamos tu sesión?</h2>
-        <p class="muted">
-          Cuéntame fecha, lugar y estilo. Respondo rápido.
-        </p>
+        <p class="muted">Cuéntame fecha, lugar y estilo. Respondo rápido.</p>
         <div class="contact-actions">
           <a class="btn btn-primary" id="contactWhatsApp" href="#" rel="noreferrer">Hablar por WhatsApp</a>
           <a class="btn btn-ghost" href="#galeria">Volver a la galería</a>
@@ -125,7 +123,7 @@
     </footer>
   </main>
 
-  <!-- Modal pro -->
+  <!-- Modal -->
   <div id="modal" class="modal" aria-hidden="true">
     <div class="modal-card">
       <div class="modal-head">
@@ -133,19 +131,19 @@
           <div id="modalTitle" class="modal-title">Título</div>
           <div id="modalMeta" class="modal-meta">Categoría · Fecha</div>
         </div>
-        <button id="modalClose" class="modal-close" aria-label="Cerrar">✕</button>
+        <button id="closeModal" class="modal-close" aria-label="Cerrar">✕</button>
       </div>
-      <div id="modalBody" class="modal-body"></div>
+
+      <div id="modalMedia"></div>
+      <div id="modalDesc"></div>
     </div>
   </div>
 
   <script src="./app.js"></script>
-
   <script>
-    // ajustes visuales simples
     document.getElementById("year").textContent = new Date().getFullYear();
 
-    // WhatsApp (cambia el numero)
+    // WhatsApp: CAMBIA el número
     const phone = "56900000000"; // +56 9 XXXXXXXX
     const msg = encodeURIComponent("Hola! Quiero cotizar una sesión 📸");
     const wa = `https://wa.me/${phone}?text=${msg}`;
