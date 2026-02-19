@@ -4,26 +4,18 @@ const state = {
   items: [],
   filter: "all",
   query: "",
-  filtered: [],
-  activeIndex: -1,
 };
 
 const grid = document.querySelector("#grid");
 const pills = document.querySelectorAll("[data-filter]");
 const search = document.querySelector("#search");
 
-// Modal
 const modal = document.querySelector("#modal");
-const modalBody = document.querySelector("#modalBody");
 const modalTitle = document.querySelector("#modalTitle");
-const modalDesc = document.querySelector("#modalDesc");
 const modalMeta = document.querySelector("#modalMeta");
-const modalClose = document.querySelector("#modalClose");
-const modalPrev = document.querySelector("#modalPrev");
-const modalNext = document.querySelector("#modalNext");
-const modalOpen = document.querySelector("#modalOpen");
+const modalBody = document.querySelector("#modalBody");
+const closeBtn = document.querySelector("#modalClose");
 
-// Events
 pills.forEach(p => p.addEventListener("click", () => {
   pills.forEach(x => x.classList.remove("active"));
   p.classList.add("active");
@@ -31,40 +23,28 @@ pills.forEach(p => p.addEventListener("click", () => {
   render();
 }));
 
-search?.addEventListener("input", (e) => {
+search.addEventListener("input", (e) => {
   state.query = e.target.value.trim().toLowerCase();
   render();
 });
 
-modalClose?.addEventListener("click", closeModal);
-modal?.addEventListener("click", (e) => {
+closeBtn.addEventListener("click", closeModal);
+modal.addEventListener("click", (e) => {
   if (e.target === modal) closeModal();
 });
-
-modalPrev?.addEventListener("click", () => stepModal(-1));
-modalNext?.addEventListener("click", () => stepModal(1));
-
 document.addEventListener("keydown", (e) => {
-  if (!modal.classList.contains("open")) return;
   if (e.key === "Escape") closeModal();
-  if (e.key === "ArrowLeft") stepModal(-1);
-  if (e.key === "ArrowRight") stepModal(1);
 });
 
 init();
 
 async function init() {
-  try{
-    const res = await fetch(GALLERY_URL, { cache: "no-store" });
-    const data = await res.json();
-    state.items = (Array.isArray(data) ? data : []).map(normalizeItem);
+  const res = await fetch(GALLERY_URL, { cache: "no-store" });
+  const data = await res.json();
+  state.items = (Array.isArray(data) ? data : []).map(normalizeItem);
 
-    render();
-    openFromUrlIfAny();
-  }catch(err){
-    console.log("init error:", err?.message || err);
-    grid.innerHTML = `<div style="color:#aab7d3;padding:10px">No se pudo cargar la galería.</div>`;
-  }
+  render();
+  openFromUrlIfAny();
 }
 
 function normalizeItem(item) {
@@ -86,16 +66,12 @@ function render() {
     .filter(matchesFilter)
     .filter(matchesQuery);
 
-  state.filtered = items;
-
   if (!items.length) {
-    grid.innerHTML = `<div style="color:#aab7d3;padding:10px">No hay contenido aún.</div>`;
+    grid.innerHTML = `<div style="color:rgba(255,255,255,.65);padding:10px">No hay contenido aún.</div>`;
     return;
   }
 
-  for (const item of items) {
-    grid.appendChild(card(item));
-  }
+  for (const item of items) grid.appendChild(card(item));
 }
 
 function matchesFilter(item) {
@@ -110,7 +86,7 @@ function matchesQuery(item) {
 }
 
 function card(item) {
-  const el = document.createElement("article");
+  const el = document.createElement("div");
   el.className = "card";
   el.id = `item-${item.id}`;
   el.dataset.id = item.id;
@@ -127,32 +103,30 @@ function card(item) {
   } else {
     // video placeholder
     media.innerHTML = `
-      <div style="aspect-ratio:16/10; position:relative;">
-        <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center;">
-          <div style="width:76px;height:76px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:rgba(0,0,0,.25);display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px); font-size:24px;">
-            ▶
-          </div>
+      <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:1;">
+        <div style="width:72px;height:72px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px)">
+          ▶
         </div>
       </div>
+      <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.15),rgba(0,0,0,.55));"></div>
     `;
   }
 
-  const badgebar = document.createElement("div");
-  badgebar.className = "badgebar";
-  badgebar.innerHTML = `
-    <span class="tag accent">${escapeHtml(prettyCat(item.category))}</span>
-    <span class="tag ${item.type === "video" ? "video" : ""}">${escapeHtml(item.type)}</span>
+  const badge = document.createElement("div");
+  badge.className = "badge";
+  badge.innerHTML = `
+    <span class="tag accent">${prettyCat(item.category)}</span>
+    <span class="tag ${item.type === "video" ? "video" : ""}">${item.type}</span>
   `;
-
-  media.appendChild(badgebar);
+  media.appendChild(badge);
 
   const body = document.createElement("div");
   body.className = "body";
   body.innerHTML = `
     <h3 class="title">${escapeHtml(item.title)}</h3>
-    <p class="desc">${escapeHtml(item.description || "")}</p>
+    <div class="desc">${escapeHtml(item.description || "")}</div>
     <div class="btnrow">
-      <button class="btn btn-primary" data-open type="button">Ver</button>
+      <button class="btn btn-primary" data-open>Ver</button>
       <a class="btn" href="${item.url}" target="_blank" rel="noreferrer">Abrir</a>
     </div>
   `;
@@ -160,22 +134,14 @@ function card(item) {
   el.appendChild(media);
   el.appendChild(body);
 
-  el.querySelector("[data-open]").addEventListener("click", () => openModalById(item.id));
-  media.addEventListener("click", () => openModalById(item.id));
+  el.querySelector("[data-open]").addEventListener("click", () => openModal(item));
+  media.addEventListener("click", () => openModal(item));
 
   return el;
 }
 
-function openModalById(id) {
-  const idx = state.filtered.findIndex(x => String(x.id) === String(id));
-  if (idx === -1) return;
-  state.activeIndex = idx;
-  openModal(state.filtered[idx]);
-}
-
 function openModal(item) {
   modalTitle.textContent = item.title;
-  modalDesc.textContent = item.description || "";
   modalMeta.textContent = `${prettyCat(item.category)} • ${item.type} • ${new Date(item.createdAt).toLocaleDateString()}`;
 
   modalBody.innerHTML = "";
@@ -190,16 +156,11 @@ function openModal(item) {
     iframe.src = embedUrl(item.url);
     iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
     iframe.allowFullscreen = true;
-    iframe.style.border = "0";
     modalBody.appendChild(iframe);
   }
 
-  modalOpen.href = item.url;
-
   modal.classList.add("open");
-  modal.setAttribute("aria-hidden", "false");
 
-  // URL ?open=
   const u = new URL(window.location.href);
   u.searchParams.set("open", item.id);
   history.replaceState({}, "", u.toString());
@@ -207,7 +168,6 @@ function openModal(item) {
 
 function closeModal() {
   modal.classList.remove("open");
-  modal.setAttribute("aria-hidden", "true");
   modalBody.innerHTML = "";
 
   const u = new URL(window.location.href);
@@ -215,36 +175,30 @@ function closeModal() {
   history.replaceState({}, "", u.toString());
 }
 
-function stepModal(dir) {
-  if (state.activeIndex < 0) return;
-  const next = state.activeIndex + dir;
-  if (next < 0 || next >= state.filtered.length) return;
-  state.activeIndex = next;
-  openModal(state.filtered[state.activeIndex]);
-}
-
 function openFromUrlIfAny() {
   const u = new URL(window.location.href);
   const id = u.searchParams.get("open");
   if (!id) return;
 
-  render(); // asegurar state.filtered
-  const found = state.filtered.find(x => String(x.id) === String(id));
+  const found = state.items.find(x => String(x.id) === String(id));
   if (!found) return;
 
-  openModalById(id);
+  openModal(found);
 
   const el = document.getElementById(`item-${id}`);
   if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
 }
 
 function embedUrl(url) {
+  // youtube
   const yt = url.match(/(youtube\.com\/watch\?v=|youtu\.be\/)([A-Za-z0-9_\-]+)/);
   if (yt) return `https://www.youtube.com/embed/${yt[2]}`;
 
+  // vimeo
   const vm = url.match(/vimeo\.com\/(\d+)/);
   if (vm) return `https://player.vimeo.com/video/${vm[1]}`;
 
+  // fallback
   return url;
 }
 
@@ -256,8 +210,7 @@ function prettyCat(cat) {
 }
 
 function escapeHtml(s) {
-  return String(s ?? "").replace(/[&<>"']/g, c => ({
+  return String(s).replace(/[&<>"']/g, c => ({
     "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
   }[c]));
 }
-
