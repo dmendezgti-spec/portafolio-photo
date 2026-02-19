@@ -7,33 +7,32 @@ const state = {
 };
 
 const grid = document.querySelector("#grid");
-const chips = document.querySelectorAll("[data-filter]");
+const pills = document.querySelectorAll("[data-filter]");
 const search = document.querySelector("#search");
 
-// Modal (IDs del HTML pro)
 const modal = document.querySelector("#modal");
-const modalBody = document.querySelector("#modalBody");
+const modalMedia = document.querySelector("#modalMedia");
 const modalTitle = document.querySelector("#modalTitle");
+const modalDesc = document.querySelector("#modalDesc");
 const modalMeta = document.querySelector("#modalMeta");
-const closeBtn = document.querySelector("#modalClose");
+const closeBtn = document.querySelector("#closeModal");
 
-chips.forEach((c) =>
-  c.addEventListener("click", () => {
-    chips.forEach((x) => x.classList.remove("active"));
-    c.classList.add("active");
-    state.filter = c.dataset.filter;
+pills.forEach((p) =>
+  p.addEventListener("click", () => {
+    pills.forEach((x) => x.classList.remove("active"));
+    p.classList.add("active");
+    state.filter = p.dataset.filter;
     render();
   })
 );
 
-search?.addEventListener("input", (e) => {
+search.addEventListener("input", (e) => {
   state.query = e.target.value.trim().toLowerCase();
   render();
 });
 
-closeBtn?.addEventListener("click", closeModal);
-modal?.addEventListener("click", (e) => {
-  // cerrar solo si clickeas el overlay, no el card
+closeBtn.addEventListener("click", closeModal);
+modal.addEventListener("click", (e) => {
   if (e.target === modal) closeModal();
 });
 document.addEventListener("keydown", (e) => {
@@ -69,11 +68,13 @@ function render() {
   const items = state.items.filter(matchesFilter).filter(matchesQuery);
 
   if (!items.length) {
-    grid.innerHTML = `<div style="color:rgba(255,255,255,.6);padding:10px">No hay contenido aún.</div>`;
+    grid.innerHTML = `<div style="color:#aab7d3;padding:10px">No hay contenido aún.</div>`;
     return;
   }
 
-  for (const item of items) grid.appendChild(card(item));
+  for (const item of items) {
+    grid.appendChild(card(item));
+  }
 }
 
 function matchesFilter(item) {
@@ -88,12 +89,11 @@ function matchesQuery(item) {
 }
 
 function card(item) {
-  const el = document.createElement("article");
+  const el = document.createElement("div");
   el.className = "card";
   el.id = `item-${item.id}`;
   el.dataset.id = item.id;
 
-  // Media
   const media = document.createElement("div");
   media.className = "media";
 
@@ -104,71 +104,39 @@ function card(item) {
     img.src = item.thumb || item.url;
     media.appendChild(img);
   } else {
-    // Video preview elegante
     media.innerHTML = `
-      <div style="position:absolute;inset:0;display:grid;place-items:center;z-index:2">
-        <div style="width:74px;height:74px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:rgba(0,0,0,.35);display:grid;place-items:center;backdrop-filter:blur(10px)">
+      <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:2;">
+        <div style="width:72px;height:72px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px)">
           ▶
         </div>
       </div>
+      <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.15),rgba(0,0,0,.55));"></div>
     `;
   }
 
-  // Badges pro
-  const badges = document.createElement("div");
-  badges.className = "badges";
+  const badge = document.createElement("div");
+  badge.className = "badge";
+  badge.innerHTML = `
+    <span class="tag accent">${prettyCat(item.category)}</span>
+    <span class="tag ${item.type === "video" ? "video" : ""}">${item.type}</span>
+  `;
+  media.appendChild(badge);
 
-  const bCat = document.createElement("span");
-  bCat.className = "badge cat";
-  bCat.textContent = prettyCat(item.category);
-
-  const bType = document.createElement("span");
-  bType.className = `badge ${item.type === "video" ? "video" : "photo"}`;
-  bType.textContent = item.type;
-
-  badges.appendChild(bCat);
-  badges.appendChild(bType);
-  media.appendChild(badges);
-
-  // Content
-  const content = document.createElement("div");
-  content.className = "content";
-
-  const h = document.createElement("h3");
-  h.className = "title";
-  h.innerHTML = escapeHtml(item.title);
-
-  const d = document.createElement("p");
-  d.className = "desc";
-  d.innerHTML = escapeHtml(item.description || "");
-
-  const actions = document.createElement("div");
-  actions.className = "actions";
-
-  const btnView = document.createElement("button");
-  btnView.className = "btn btn-primary";
-  btnView.type = "button";
-  btnView.textContent = "Ver";
-
-  const btnOpen = document.createElement("a");
-  btnOpen.className = "btn btn-ghost";
-  btnOpen.href = item.url;
-  btnOpen.target = "_blank";
-  btnOpen.rel = "noreferrer";
-  btnOpen.textContent = "Abrir";
-
-  actions.appendChild(btnView);
-  actions.appendChild(btnOpen);
-
-  content.appendChild(h);
-  content.appendChild(d);
-  content.appendChild(actions);
+  const body = document.createElement("div");
+  body.className = "body";
+  body.innerHTML = `
+    <h3 class="title">${escapeHtml(item.title)}</h3>
+    <div class="desc">${escapeHtml(item.description || "")}</div>
+    <div class="btnrow">
+      <button class="btn primary" data-open>Ver</button>
+      <a class="btn" href="${item.url}" target="_blank" rel="noreferrer">Abrir</a>
+    </div>
+  `;
 
   el.appendChild(media);
-  el.appendChild(content);
+  el.appendChild(body);
 
-  // Eventos
-  btnView.addEventListener("click", () => openModal(item));
+  el.querySelector("[data-open]").addEventListener("click", () => openModal(item));
   media.addEventListener("click", () => openModal(item));
 
   return el;
@@ -176,17 +144,15 @@ function card(item) {
 
 function openModal(item) {
   modalTitle.textContent = item.title;
-  modalMeta.textContent = `${prettyCat(item.category)} • ${item.type} • ${new Date(
-    item.createdAt
-  ).toLocaleDateString()}`;
+  modalDesc.textContent = item.description || "";
+  modalMeta.textContent = `${prettyCat(item.category)} • ${item.type} • ${new Date(item.createdAt).toLocaleDateString()}`;
 
-  modalBody.innerHTML = "";
-
+  modalMedia.innerHTML = "";
   if (item.type === "photo") {
     const img = document.createElement("img");
     img.alt = item.title;
     img.src = item.url;
-    modalBody.appendChild(img);
+    modalMedia.appendChild(img);
   } else {
     const iframe = document.createElement("iframe");
     iframe.src = embedUrl(item.url);
@@ -194,13 +160,11 @@ function openModal(item) {
       "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
     iframe.allowFullscreen = true;
     iframe.style.border = "0";
-    modalBody.appendChild(iframe);
+    modalMedia.appendChild(iframe);
   }
 
   modal.classList.add("open");
-  modal.setAttribute("aria-hidden", "false");
 
-  // URL ?open=
   const u = new URL(window.location.href);
   u.searchParams.set("open", item.id);
   history.replaceState({}, "", u.toString());
@@ -208,10 +172,8 @@ function openModal(item) {
 
 function closeModal() {
   modal.classList.remove("open");
-  modal.setAttribute("aria-hidden", "true");
-  modalBody.innerHTML = "";
+  modalMedia.innerHTML = "";
 
-  // limpia ?open
   const u = new URL(window.location.href);
   u.searchParams.delete("open");
   history.replaceState({}, "", u.toString());
@@ -231,11 +193,9 @@ function openFromUrlIfAny() {
 }
 
 function embedUrl(url) {
-  // youtube
   const yt = url.match(/(youtube\.com\/watch\?v=|youtu\.be\/)([A-Za-z0-9_\-]+)/);
   if (yt) return `https://www.youtube.com/embed/${yt[2]}`;
 
-  // vimeo
   const vm = url.match(/vimeo\.com\/(\d+)/);
   if (vm) return `https://player.vimeo.com/video/${vm[1]}`;
 
@@ -250,12 +210,14 @@ function prettyCat(cat) {
 }
 
 function escapeHtml(s) {
-  return String(s).replace(/[&<>"']/g, (c) => ({
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#39;",
-  }[c]));
+  return String(s).replace(/[&<>"']/g, (c) =>
+    ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;",
+    }[c])
+  );
 }
 
