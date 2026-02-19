@@ -1,230 +1,59 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Portfolio Fotografía</title>
-  <meta name="description" content="Portfolio de fotografía: bodas, sesiones fotográficas y pre bodas." />
-  <style>
-    :root { --bg:#0b0b0f; --card:#12121a; --muted:#a7a7b7; --text:#f2f2f7; --line:#24243a; }
-    * { box-sizing:border-box; }
-    body { margin:0; font-family:system-ui, -apple-system, Segoe UI, Roboto, Arial; background:var(--bg); color:var(--text); }
-    .wrap { max-width:1100px; margin:0 auto; padding:28px 18px 60px; }
-    header { display:flex; align-items:flex-end; justify-content:space-between; gap:16px; flex-wrap:wrap; }
-    h1 { margin:0; letter-spacing:-.02em; font-size:28px; }
-    .sub { margin:8px 0 0; color:var(--muted); }
-    .controls { display:flex; gap:10px; flex-wrap:wrap; margin:18px 0 18px; }
-    .chip, .search {
-      border:1px solid var(--line); background:rgba(255,255,255,0.02);
-      color:var(--text); border-radius:999px; padding:9px 12px;
-      transition:.15s; font-size:14px;
-    }
-    .chip { cursor:pointer; }
-    .chip:hover { transform: translateY(-1px); border-color:#3a3a62; }
-    .chip.active { border-color:#ffffff; background:rgba(255,255,255,0.08); }
-    .search { cursor:text; outline:none; min-width:240px; }
-    .grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(240px, 1fr)); gap:14px; margin-top:12px; }
-    .card {
-      border:1px solid var(--line); border-radius:18px; overflow:hidden;
-      background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
-      box-shadow: 0 12px 30px rgba(0,0,0,.35);
-      transition:.15s;
-    }
-    .card:hover { transform: translateY(-2px); border-color:#3a3a62; }
-    .thumb { width:100%; height:260px; display:block; background:#0f0f16; }
-    .thumb img { width:100%; height:100%; object-fit:cover; display:block; }
-    .thumb .video {
-      width:100%; height:100%; display:flex; align-items:center; justify-content:center;
-      color:var(--muted); font-size:14px; padding:14px;
-    }
-    .meta { padding:12px 12px 14px; }
-    .title { font-weight:800; letter-spacing:-.01em; }
-    .desc { margin-top:6px; color:var(--muted); font-size:13px; line-height:1.25rem; }
-    .tags { margin-top:10px; display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
-    .tag { font-size:12px; color:var(--muted); border:1px solid var(--line); padding:4px 8px; border-radius:999px; }
-    .btn {
-      display:inline-flex; align-items:center; gap:8px;
-      font-size:13px; color:var(--text); border:1px solid var(--line);
-      padding:8px 10px; border-radius:12px; text-decoration:none;
-      background:rgba(255,255,255,0.02); transition:.15s;
-    }
-    .btn:hover { border-color:#ffffff; transform: translateY(-1px); }
-    .row { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; }
-    .lb {
-      position:fixed; inset:0; background:rgba(0,0,0,.78);
-      display:none; align-items:center; justify-content:center; padding:20px;
-      z-index:9999;
-    }
-    .lb.open { display:flex; }
-    .lb-content {
-      width:min(1050px, 96vw); background:#0b0b0f; border:1px solid var(--line);
-      border-radius:18px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,.6);
-    }
-    .lb-top { display:flex; justify-content:space-between; align-items:center; gap:10px; padding:12px 14px; border-bottom:1px solid var(--line);}
-    .lb-top .t { font-weight:800; }
-    .lb-close { cursor:pointer; border:1px solid var(--line); border-radius:12px; padding:8px 10px; background:rgba(255,255,255,0.02); }
-    .lb-body { background:#07070b; }
-    .lb-body img { width:100%; height:auto; display:block; }
-    .lb-body iframe { width:100%; aspect-ratio:16/9; border:0; display:block; }
-    footer { margin-top:34px; color:var(--muted); font-size:13px; }
-  </style>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Portfolio</title>
+  <link rel="stylesheet" href="/assets/styles.css"/>
 </head>
 <body>
-<div class="wrap">
-  <header>
-    <div>
-      <h1>Portfolio</h1>
-      <p class="sub">Bodas · Sesiones fotográficas · Pre bodas</p>
-    </div>
-  </header>
+  <div class="container">
+    <div class="header">
+      <div class="brand">
+        <h1>Portfolio</h1>
+        <p>Bodas · Sesiones fotográficas · Pre bodas</p>
+      </div>
 
-  <div class="controls">
-    <button class="chip active" data-cat="todos">Todos</button>
-    <button class="chip" data-cat="bodas">Bodas</button>
-    <button class="chip" data-cat="sesiones-fotograficas">Sesiones fotográficas</button>
-    <button class="chip" data-cat="pre-bodas">Pre bodas</button>
-    <input class="search" id="q" placeholder="Buscar por título o descripción..." />
-  </div>
-
-  <div class="grid" id="grid"></div>
-
-  <footer>
-    <div>Actualiza el sitio enviando fotos o videos al bot de Telegram.</div>
-  </footer>
-</div>
-
-<div class="lb" id="lb">
-  <div class="lb-content">
-    <div class="lb-top">
-      <div class="t" id="lbTitle"></div>
-      <div style="display:flex; gap:8px; align-items:center;">
-        <a class="btn" id="lbOpen" href="#" target="_blank" rel="noreferrer">Abrir</a>
-        <button class="lb-close" id="lbClose">Cerrar</button>
+      <div class="actions">
+        <button class="pill active" data-filter="all">Todos</button>
+        <button class="pill" data-filter="bodas">Bodas</button>
+        <button class="pill" data-filter="sesiones-fotograficas">Sesiones fotográficas</button>
+        <button class="pill" data-filter="pre-bodas">Pre bodas</button>
+        <input id="search" class="search" placeholder="Buscar por título o descripción…"/>
       </div>
     </div>
-    <div class="lb-body" id="lbBody"></div>
+
+    <div id="grid" class="grid"></div>
+
+    <div class="footer-note">
+      Actualiza el sitio enviando fotos o videos al bot de Telegram.
+    </div>
   </div>
-</div>
 
-<script>
-  const grid = document.getElementById('grid');
-  const q = document.getElementById('q');
-  const chips = Array.from(document.querySelectorAll('.chip'));
-  const lb = document.getElementById('lb');
-  const lbClose = document.getElementById('lbClose');
-  const lbBody = document.getElementById('lbBody');
-  const lbTitle = document.getElementById('lbTitle');
-  const lbOpen = document.getElementById('lbOpen');
-
-  let all = [];
-  let cat = 'todos';
-
-  function esc(s){ return (s||'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;'); }
-
-  function youtubeEmbed(url){
-    try {
-      const u = new URL(url);
-      if (u.hostname.includes('youtu.be')) return `https://www.youtube.com/embed/${u.pathname.replace('/','')}`;
-      if (u.hostname.includes('youtube.com')) {
-        const id = u.searchParams.get('v'); if (id) return `https://www.youtube.com/embed/${id}`;
-        if (u.pathname.startsWith('/shorts/')) return `https://www.youtube.com/embed/${u.pathname.split('/shorts/')[1]}`;
-      }
-    } catch {}
-    return null;
-  }
-  function vimeoEmbed(url){
-    try {
-      const u = new URL(url);
-      if (u.hostname.includes('vimeo.com')) {
-        const id = u.pathname.split('/').filter(Boolean)[0];
-        if (id && /^\d+$/.test(id)) return `https://player.vimeo.com/video/${id}`;
-      }
-    } catch {}
-    return null;
-  }
-
-  function openLightbox(item){
-    lbTitle.textContent = item.title || '';
-    lbOpen.href = item.type === 'video' ? item.url : item.image;
-
-    if (item.type === 'video') {
-      const src = youtubeEmbed(item.url) || vimeoEmbed(item.url);
-      lbBody.innerHTML = src
-        ? `<iframe src="${esc(src)}" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`
-        : `<div style="padding:18px;color:#a7a7b7">Video no embebible. Usa "Abrir".</div>`;
-    } else {
-      lbBody.innerHTML = `<img src="${esc(item.image)}" alt="${esc(item.title)}">`;
-    }
-    lb.classList.add('open');
-  }
-  function closeLightbox(){ lb.classList.remove('open'); lbBody.innerHTML = ''; }
-
-  lbClose.onclick = closeLightbox;
-  lb.onclick = (e)=> { if (e.target === lb) closeLightbox(); };
-  window.addEventListener('keydown', (e)=> { if (e.key === 'Escape') closeLightbox(); });
-
-  function matches(item, query){
-    if (!query) return true;
-    const s = `${item.title||''} ${item.description||''}`.toLowerCase();
-    return s.includes(query.toLowerCase());
-  }
-
-  function render(){
-    chips.forEach(c => c.classList.toggle('active', c.dataset.cat === cat));
-    const query = q.value.trim();
-
-    const items = all
-      .filter(x => (cat === 'todos' ? true : x.category === cat))
-      .filter(x => matches(x, query))
-      .sort((a,b)=> (b.date||'').localeCompare(a.date||''));
-
-    grid.innerHTML = items.map(item => {
-      const title = esc(item.title);
-      const desc = esc(item.description);
-      const date = esc(item.date);
-      const category = esc(item.category);
-      const isVideo = item.type === 'video';
-      const thumb = isVideo
-        ? `<div class="thumb"><div class="video">▶ Video · ${title}</div></div>`
-        : `<div class="thumb"><img src="${esc(item.image)}" alt="${title}" loading="lazy"></div>`;
-      const openUrl = isVideo ? item.url : item.image;
-
-      return `
-        <div class="card">
-          <a href="javascript:void(0)" data-id="${esc(item.id)}">${thumb}</a>
-          <div class="meta">
-            <div class="title">${title}</div>
-            <div class="desc">${desc}</div>
-            <div class="tags">
-              <span class="tag">${category}</span>
-              <span class="tag">${date}</span>
-              <span class="tag">${isVideo ? 'video' : 'foto'}</span>
-            </div>
-            <div class="row">
-              <a class="btn" href="${esc(openUrl)}" target="_blank" rel="noreferrer">Abrir</a>
-              <a class="btn" href="javascript:void(0)" data-id="${esc(item.id)}">Ver</a>
-            </div>
-          </div>
+  <!-- Modal -->
+  <div id="modal" class="modal" aria-hidden="true">
+    <div class="modal-card">
+      <div class="modal-top">
+        <div style="display:flex;flex-direction:column;gap:2px">
+          <strong id="modalTitle" style="font-size:14px"></strong>
+          <span id="modalMeta" style="color:#aab7d3;font-size:12px"></span>
         </div>
-      `;
-    }).join('');
+        <button id="closeModal" class="x">Cerrar</button>
+      </div>
 
-    grid.querySelectorAll('[data-id]').forEach(el=>{
-      el.onclick = () => {
-        const id = el.getAttribute('data-id');
-        const item = all.find(x => x.id === id);
-        if (item) openLightbox(item);
-      };
-    });
-  }
+      <div class="modal-content">
+        <div id="modalMedia" class="modal-media"></div>
+        <div class="modal-info">
+          <h2 id="modalTitle2" style="display:none"></h2>
+          <p id="modalDesc"></p>
+          <p style="margin-top:14px;color:#aab7d3;font-size:12px;">
+            Tip: puedes compartir el link del modal (queda con <code>?open=</code>).
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
 
-  chips.forEach(btn => btn.onclick = () => { cat = btn.dataset.cat; render(); });
-  q.addEventListener('input', render);
-
-  fetch('./content/gallery.json', { cache:'no-store' })
-    .then(r => r.json())
-    .then(data => { all = Array.isArray(data) ? data : []; render(); })
-    .catch(() => { grid.innerHTML = '<div style="color:#a7a7b7">Error cargando la galería.</div>'; });
-</script>
+  <script src="/assets/app.js"></script>
 </body>
 </html>
