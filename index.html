@@ -4,14 +4,17 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Portafolio | Fotografía</title>
-  <link rel="stylesheet" href="/assets/styles.css?v=9" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="/assets/styles.css?v=12" />
 </head>
 
 <body>
   <!-- Topbar -->
   <header class="topbar">
     <div class="wrap topbar-inner">
-      <a class="logo" href="./">
+      <a class="logo" href="./" aria-label="Inicio">
         <span class="logo-mark">◈</span>
         <span class="logo-text">
           <span class="logo-title">Portafolio</span>
@@ -19,7 +22,7 @@
         </span>
       </a>
 
-      <nav class="nav">
+      <nav class="nav" aria-label="Navegación">
         <a class="nav-link" href="#galeria">Galería</a>
         <a class="nav-link" href="#categorias">Categorías</a>
         <a class="nav-link" href="#contacto">Contacto</a>
@@ -34,6 +37,8 @@
 
   <!-- Hero -->
   <section class="hero">
+    <div class="hero-bg" aria-hidden="true"></div>
+
     <div class="wrap hero-inner">
       <div class="hero-copy">
         <p class="kicker">Fotografía con estética cinematográfica</p>
@@ -63,7 +68,7 @@
         </div>
       </div>
 
-      <div class="hero-card">
+      <aside class="hero-card" aria-label="Info">
         <div class="hero-card-top">
           <span class="pill pill-gold">Bodas</span>
           <span class="pill">Preboda</span>
@@ -78,11 +83,11 @@
           <div class="dot"></div>
           <div>Tip: usa “Título | Descripción” en la foto.</div>
         </div>
-      </div>
+      </aside>
     </div>
   </section>
 
-  <!-- Gallery -->
+  <!-- Main -->
   <main class="wrap">
     <section id="galeria" class="section">
       <div class="section-head">
@@ -103,14 +108,18 @@
         <button class="chip" data-filter="pre-bodas">Prebodas</button>
       </div>
 
-      <div id="grid" class="grid"></div>
+      <!-- Masonry grid -->
+      <div id="grid" class="grid" aria-live="polite"></div>
     </section>
 
-    <!-- Contact -->
     <section id="contacto" class="section contact">
       <div class="contact-card">
-        <h2>¿Cotizamos tu sesión?</h2>
-        <p class="muted">Cuéntame fecha, lugar y estilo. Respondo rápido.</p>
+        <div class="contact-left">
+          <h2>¿Cotizamos tu sesión?</h2>
+          <p class="muted">
+            Cuéntame fecha, lugar y estilo. Respondo rápido.
+          </p>
+        </div>
         <div class="contact-actions">
           <a class="btn btn-primary" id="contactWhatsApp" href="#" rel="noreferrer">Hablar por WhatsApp</a>
           <a class="btn btn-ghost" href="#galeria">Volver a la galería</a>
@@ -123,27 +132,34 @@
     </footer>
   </main>
 
-  <!-- Modal -->
+  <!-- Modal / Lightbox -->
   <div id="modal" class="modal" aria-hidden="true">
-    <div class="modal-card">
-      <div class="modal-head">
-        <div>
-          <div id="modalTitle" class="modal-title">Título</div>
-          <div id="modalMeta" class="modal-meta">Categoría · Fecha</div>
-        </div>
-        <button id="closeModal" class="modal-close" aria-label="Cerrar">✕</button>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-label="Vista de contenido">
+      <button id="modalClose" class="modal-close" aria-label="Cerrar">✕</button>
+
+      <div class="modal-main">
+        <button id="modalPrev" class="nav-arrow left" aria-label="Anterior">‹</button>
+        <div id="modalBody" class="modal-body"></div>
+        <button id="modalNext" class="nav-arrow right" aria-label="Siguiente">›</button>
       </div>
 
-      <div id="modalMedia"></div>
-      <div id="modalDesc"></div>
+      <div class="modal-foot">
+        <div class="modal-foot-text">
+          <div id="modalTitle" class="modal-title">Título</div>
+          <div id="modalMeta" class="modal-meta">Categoría · Fecha</div>
+          <div id="modalDesc" class="modal-desc"></div>
+        </div>
+        <a id="modalOpen" class="btn btn-ghost" target="_blank" rel="noreferrer">Abrir original</a>
+      </div>
     </div>
   </div>
 
-  <script src="/assets/app.js?v=9"></script>
+  <script src="/assets/app.js?v=12"></script>
+
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();
 
-    // WhatsApp: CAMBIA el número
+    // WhatsApp (cambia el numero)
     const phone = "56900000000"; // +56 9 XXXXXXXX
     const msg = encodeURIComponent("Hola! Quiero cotizar una sesión 📸");
     const wa = `https://wa.me/${phone}?text=${msg}`;
