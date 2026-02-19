@@ -1,31 +1,159 @@
-<div class="container">
-  <div class="hero">
-    <div class="brand">
-      <h1>Portafolio</h1>
-      <div class="subtitle">
-        Bodas · Prebodas · Paisajes — <b>Fotografía con estética cinematográfica</b>
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Portafolio | Fotografía</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+
+<body>
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <a class="logo" href="./">
+        <span class="logo-mark">◈</span>
+        <span class="logo-text">
+          <span class="logo-title">Portafolio</span>
+          <span class="logo-sub">Bodas · Prebodas · Paisajes</span>
+        </span>
+      </a>
+
+      <nav class="nav">
+        <a class="nav-link" href="#galeria">Galería</a>
+        <a class="nav-link" href="#categorias">Categorías</a>
+        <a class="nav-link" href="#contacto">Contacto</a>
+      </nav>
+
+      <div class="topbar-actions">
+        <button id="openWhatsApp" class="btn btn-ghost" type="button">WhatsApp</button>
+        <a class="btn btn-primary" href="#contacto">Cotizar</a>
       </div>
     </div>
+  </header>
 
-    <div class="tools">
-      <div class="filters">
+  <!-- Hero -->
+  <section class="hero">
+    <div class="wrap hero-inner">
+      <div class="hero-copy">
+        <p class="kicker">Fotografía con estética cinematográfica</p>
+        <h1>Momentos reales, luz perfecta, recuerdos eternos.</h1>
+        <p class="lead">
+          Cobertura de <b>bodas</b>, <b>prebodas</b> y sesiones en exteriores. Galería actualizada desde Telegram.
+        </p>
+
+        <div class="hero-cta">
+          <a class="btn btn-primary" href="#galeria">Ver galería</a>
+          <a class="btn btn-ghost" href="#categorias">Explorar categorías</a>
+        </div>
+
+        <div class="hero-metrics">
+          <div class="metric">
+            <div class="metric-num">+100</div>
+            <div class="metric-label">momentos capturados</div>
+          </div>
+          <div class="metric">
+            <div class="metric-num">4K</div>
+            <div class="metric-label">calidad y entrega</div>
+          </div>
+          <div class="metric">
+            <div class="metric-num">24h</div>
+            <div class="metric-label">respuesta rápida</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-card">
+        <div class="hero-card-top">
+          <span class="pill pill-gold">Bodas</span>
+          <span class="pill">Preboda</span>
+          <span class="pill">Paisaje</span>
+        </div>
+        <div class="hero-card-title">Galería viva</div>
+        <div class="hero-card-desc">
+          Sube fotos y videos desde Telegram y el sitio se actualiza automáticamente.
+        </div>
+        <div class="hero-card-line"></div>
+        <div class="hero-card-mini">
+          <div class="dot"></div>
+          <div>Tip: usa “Título | Descripción” en la foto.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery -->
+  <main class="wrap">
+    <section id="galeria" class="section">
+      <div class="section-head">
+        <div>
+          <h2>Galería</h2>
+          <p class="muted">Filtra por categoría o busca por título/descripcion.</p>
+        </div>
+
+        <div class="search">
+          <input id="search" type="search" placeholder="Buscar por título o descripción…" />
+        </div>
+      </div>
+
+      <div id="categorias" class="filters">
         <button class="chip active" data-filter="all">Todos</button>
         <button class="chip" data-filter="bodas">Bodas</button>
-        <button class="chip" data-filter="sesiones-fotograficas">Sesiones fotográficas</button>
-        <button class="chip" data-filter="pre-bodas">Pre bodas</button>
+        <button class="chip" data-filter="sesiones-fotograficas">Sesiones</button>
+        <button class="chip" data-filter="pre-bodas">Prebodas</button>
       </div>
 
-      <div class="search">
-        <input id="search" placeholder="Buscar por título o descripción..." />
+      <div id="grid" class="grid"></div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contacto" class="section contact">
+      <div class="contact-card">
+        <h2>¿Cotizamos tu sesión?</h2>
+        <p class="muted">
+          Cuéntame fecha, lugar y estilo. Respondo rápido.
+        </p>
+        <div class="contact-actions">
+          <a class="btn btn-primary" id="contactWhatsApp" href="#" rel="noreferrer">Hablar por WhatsApp</a>
+          <a class="btn btn-ghost" href="#galeria">Volver a la galería</a>
+        </div>
       </div>
+    </section>
+
+    <footer class="footer">
+      <div class="muted">© <span id="year"></span> Portafolio Fotografía · Actualizado desde Telegram</div>
+    </footer>
+  </main>
+
+  <!-- Modal pro -->
+  <div id="modal" class="modal" aria-hidden="true">
+    <div class="modal-card">
+      <div class="modal-head">
+        <div>
+          <div id="modalTitle" class="modal-title">Título</div>
+          <div id="modalMeta" class="modal-meta">Categoría · Fecha</div>
+        </div>
+        <button id="modalClose" class="modal-close" aria-label="Cerrar">✕</button>
+      </div>
+      <div id="modalBody" class="modal-body"></div>
     </div>
   </div>
 
-  <div class="hr"></div>
+  <script src="./app.js"></script>
 
-  <div id="grid" class="grid"></div>
+  <script>
+    // ajustes visuales simples
+    document.getElementById("year").textContent = new Date().getFullYear();
 
-  <div class="footer-note">
-    Actualiza el sitio enviando fotos o videos al bot de Telegram.
-  </div>
-</div>
+    // WhatsApp (cambia el numero)
+    const phone = "56900000000"; // +56 9 XXXXXXXX
+    const msg = encodeURIComponent("Hola! Quiero cotizar una sesión 📸");
+    const wa = `https://wa.me/${phone}?text=${msg}`;
+
+    const openWhatsApp = document.getElementById("openWhatsApp");
+    const contactWhatsApp = document.getElementById("contactWhatsApp");
+    if (openWhatsApp) openWhatsApp.onclick = () => window.open(wa, "_blank");
+    if (contactWhatsApp) contactWhatsApp.href = wa;
+  </script>
+</body>
+</html>
