@@ -1,59 +1,31 @@
-<!doctype html>
-<html lang="es">
-<head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Portfolio</title>
-  <link rel="stylesheet" href="/assets/styles.css"/>
-</head>
-<body>
-  <div class="container">
-    <div class="header">
-      <div class="brand">
-        <h1>Portfolio</h1>
-        <p>Bodas · Sesiones fotográficas · Pre bodas</p>
-      </div>
-
-      <div class="actions">
-        <button class="pill active" data-filter="all">Todos</button>
-        <button class="pill" data-filter="bodas">Bodas</button>
-        <button class="pill" data-filter="sesiones-fotograficas">Sesiones fotográficas</button>
-        <button class="pill" data-filter="pre-bodas">Pre bodas</button>
-        <input id="search" class="search" placeholder="Buscar por título o descripción…"/>
+<div class="container">
+  <div class="hero">
+    <div class="brand">
+      <h1>Portafolio</h1>
+      <div class="subtitle">
+        Bodas · Prebodas · Paisajes — <b>Fotografía con estética cinematográfica</b>
       </div>
     </div>
 
-    <div id="grid" class="grid"></div>
-
-    <div class="footer-note">
-      Actualiza el sitio enviando fotos o videos al bot de Telegram.
-    </div>
-  </div>
-
-  <!-- Modal -->
-  <div id="modal" class="modal" aria-hidden="true">
-    <div class="modal-card">
-      <div class="modal-top">
-        <div style="display:flex;flex-direction:column;gap:2px">
-          <strong id="modalTitle" style="font-size:14px"></strong>
-          <span id="modalMeta" style="color:#aab7d3;font-size:12px"></span>
-        </div>
-        <button id="closeModal" class="x">Cerrar</button>
+    <div class="tools">
+      <div class="filters">
+        <button class="chip active" data-filter="all">Todos</button>
+        <button class="chip" data-filter="bodas">Bodas</button>
+        <button class="chip" data-filter="sesiones-fotograficas">Sesiones fotográficas</button>
+        <button class="chip" data-filter="pre-bodas">Pre bodas</button>
       </div>
 
-      <div class="modal-content">
-        <div id="modalMedia" class="modal-media"></div>
-        <div class="modal-info">
-          <h2 id="modalTitle2" style="display:none"></h2>
-          <p id="modalDesc"></p>
-          <p style="margin-top:14px;color:#aab7d3;font-size:12px;">
-            Tip: puedes compartir el link del modal (queda con <code>?open=</code>).
-          </p>
-        </div>
+      <div class="search">
+        <input id="search" placeholder="Buscar por título o descripción..." />
       </div>
     </div>
   </div>
 
-  <script src="/assets/app.js"></script>
-</body>
-</html>
+  <div class="hr"></div>
+
+  <div id="grid" class="grid"></div>
+
+  <div class="footer-note">
+    Actualiza el sitio enviando fotos o videos al bot de Telegram.
+  </div>
+</div>
