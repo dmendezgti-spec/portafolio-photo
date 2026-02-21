@@ -8,8 +8,9 @@ const state = {
   activeIndex: -1,
 };
 
+// UI
 const grid = document.querySelector("#grid");
-const chips = document.querySelectorAll("[data-filter]");
+const pills = document.querySelectorAll("[data-filter]");
 const search = document.querySelector("#search");
 
 // Modal
@@ -23,20 +24,53 @@ const modalPrev = document.querySelector("#modalPrev");
 const modalNext = document.querySelector("#modalNext");
 const modalOpen = document.querySelector("#modalOpen");
 
-chips.forEach((c) => c.addEventListener("click", () => {
-  chips.forEach(x => x.classList.remove("active"));
-  c.classList.add("active");
-  state.filter = c.dataset.filter;
-  render();
-}));
+// Hero background
+const heroBg = document.querySelector("#heroBg");
 
+// Contact
+const yearEl = document.querySelector("#year");
+if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+// WhatsApp config (CÁMBIALO)
+const phone = "56900000000";
+const baseMsg = "Hola! Quiero cotizar una sesión 📸";
+const waLink = (extra = "") =>
+  `https://wa.me/${phone}?text=${encodeURIComponent(extra ? `${baseMsg}\n\n${extra}` : baseMsg)}`;
+
+const ctaWhatsApp = document.querySelector("#ctaWhatsApp");
+const ctaWhatsAppTop = document.querySelector("#ctaWhatsAppTop");
+if (ctaWhatsApp) ctaWhatsApp.href = waLink();
+if (ctaWhatsAppTop) ctaWhatsAppTop.href = waLink();
+
+const sendBtn = document.querySelector("#sendMsg");
+sendBtn?.addEventListener("click", () => {
+  const service = document.querySelector("#serviceSelect")?.value || "";
+  const msg = document.querySelector("#projectMsg")?.value || "";
+  const extra = `Servicio: ${service}\nMensaje: ${msg}`.trim();
+  window.open(waLink(extra), "_blank");
+});
+
+// Filters
+pills.forEach((p) =>
+  p.addEventListener("click", () => {
+    pills.forEach((x) => x.classList.remove("active"));
+    p.classList.add("active");
+    state.filter = p.dataset.filter;
+    render();
+  })
+);
+
+// Search
 search?.addEventListener("input", (e) => {
   state.query = e.target.value.trim().toLowerCase();
   render();
 });
 
+// Modal controls
 modalClose?.addEventListener("click", closeModal);
-modal?.addEventListener("click", (e) => { if (e.target === modal) closeModal(); });
+modal?.addEventListener("click", (e) => {
+  if (e.target === modal) closeModal();
+});
 modalPrev?.addEventListener("click", () => stepModal(-1));
 modalNext?.addEventListener("click", () => stepModal(1));
 
@@ -47,6 +81,10 @@ document.addEventListener("keydown", (e) => {
   if (e.key === "ArrowRight") stepModal(1);
 });
 
+// Scroll reveal
+setupReveal();
+
+// Init
 init();
 
 async function init() {
@@ -54,16 +92,33 @@ async function init() {
     const res = await fetch(GALLERY_URL, { cache: "no-store" });
     const data = await res.json();
     state.items = (Array.isArray(data) ? data : []).map(normalizeItem);
+
+    // Hero background: toma la primera foto disponible
+    setHeroBackgroundFromGallery();
+
     render();
     openFromUrlIfAny();
   } catch (err) {
     console.log("init error:", err?.message || err);
-    grid.innerHTML = `<div style="color:rgba(255,255,255,.65);padding:10px">No se pudo cargar la galería.</div>`;
+    if (grid) grid.innerHTML = `<div style="color:rgba(255,255,255,.65)">No se pudo cargar la galería.</div>`;
   }
 }
 
+function setHeroBackgroundFromGallery() {
+  if (!heroBg) return;
+
+  const firstPhoto = state.items.find((x) => x.type === "photo" && x.url);
+  if (!firstPhoto) {
+    // fallback: gradient
+    heroBg.style.backgroundImage =
+      "linear-gradient(120deg, rgba(208,168,58,.15), rgba(0,0,0,.55))";
+    return;
+  }
+  heroBg.style.backgroundImage = `url("${firstPhoto.url}")`;
+}
+
 function normalizeItem(item) {
-  const id = item.id || `${Date.now()}-${Math.random().toString(16).slice(2,8)}`;
+  const id = item.id || `${Date.now()}-${Math.random().toString(16).slice(2, 8)}`;
   const type = item.type || "photo";
   const category = item.category || "bodas";
   const title = item.title || "Sin título";
@@ -71,20 +126,18 @@ function normalizeItem(item) {
   const url = item.url || "";
   const thumb = item.thumb || url;
   const createdAt = item.createdAt || item.date || new Date().toISOString();
-  return { id, type, category, title, description, url, thumb, createdAt, publicId: item.publicId };
+  return { id, type, category, title, description, url, thumb, createdAt };
 }
 
 function render() {
+  if (!grid) return;
   grid.innerHTML = "";
 
-  const items = state.items
-    .filter(matchesFilter)
-    .filter(matchesQuery);
-
+  const items = state.items.filter(matchesFilter).filter(matchesQuery);
   state.filtered = items;
 
   if (!items.length) {
-    grid.innerHTML = `<div style="color:rgba(255,255,255,.65);padding:10px">No hay contenido aún.</div>`;
+    grid.innerHTML = `<div style="color:rgba(255,255,255,.65)">No hay contenido aún.</div>`;
     return;
   }
 
@@ -103,12 +156,12 @@ function matchesQuery(item) {
 }
 
 function card(item) {
-  const el = document.createElement("article");
-  el.className = "item";
-  el.id = `item-${item.id}`;
+  const el = document.createElement("div");
+  el.className = "gcard reveal";
+  el.dataset.id = item.id;
 
   const media = document.createElement("div");
-  media.className = "media";
+  media.className = "gmedia";
 
   if (item.type === "photo") {
     const img = document.createElement("img");
@@ -117,48 +170,33 @@ function card(item) {
     img.src = item.thumb || item.url;
     media.appendChild(img);
   } else {
-    // video placeholder
+    // simple poster style for videos
     media.innerHTML = `
-      <div style="aspect-ratio:16/10; position:relative;">
-        <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; z-index:1;">
-          <div style="width:76px;height:76px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:rgba(0,0,0,.25);display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px); font-size:24px;">
-            ▶
-          </div>
-        </div>
-      </div>
-    `;
+      <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center;">
+        <div style="width:74px;height:74px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;backdrop-filter:blur(10px);font-size:24px;">▶</div>
+      </div>`;
   }
 
-  const badgebar = document.createElement("div");
-  badgebar.className = "badgebar";
-  badgebar.innerHTML = `
-    <span class="tag accent">${escapeHtml(prettyCat(item.category))}</span>
-    <span class="tag ${item.type === "video" ? "video" : ""}">${escapeHtml(item.type)}</span>
-  `;
-  media.appendChild(badgebar);
-
-  const body = document.createElement("div");
-  body.className = "body";
-  body.innerHTML = `
-    <h3 class="title">${escapeHtml(item.title)}</h3>
-    <p class="desc">${escapeHtml(item.description || "")}</p>
-    <div class="row">
-      <button class="btn btn-primary" type="button" data-open>Ver</button>
-      <a class="btn" href="${item.url}" target="_blank" rel="noreferrer">Abrir</a>
-    </div>
+  const cap = document.createElement("div");
+  cap.className = "gcap";
+  cap.innerHTML = `
+    <h3 class="gtitle">${escapeHtml(item.title)}</h3>
+    <div class="gdesc">${escapeHtml(item.description || "")}</div>
   `;
 
   el.appendChild(media);
-  el.appendChild(body);
+  el.appendChild(cap);
 
-  el.querySelector("[data-open]").addEventListener("click", () => openModalById(item.id));
-  media.addEventListener("click", () => openModalById(item.id));
+  el.addEventListener("click", () => openModalById(item.id));
+
+  // aplicar reveal a cards nuevas
+  requestAnimationFrame(() => observeReveal(el));
 
   return el;
 }
 
 function openModalById(id) {
-  const idx = state.filtered.findIndex(x => String(x.id) === String(id));
+  const idx = state.filtered.findIndex((x) => String(x.id) === String(id));
   if (idx === -1) return;
   state.activeIndex = idx;
   openModal(state.filtered[idx]);
@@ -168,8 +206,10 @@ function openModal(item) {
   modalTitle.textContent = item.title;
   modalDesc.textContent = item.description || "";
   modalMeta.textContent = `${prettyCat(item.category)} • ${item.type} • ${new Date(item.createdAt).toLocaleDateString()}`;
+  modalOpen.href = item.url;
 
   modalMedia.innerHTML = "";
+
   if (item.type === "photo") {
     const img = document.createElement("img");
     img.alt = item.title;
@@ -182,8 +222,6 @@ function openModal(item) {
     iframe.allowFullscreen = true;
     modalMedia.appendChild(iframe);
   }
-
-  modalOpen.href = item.url;
 
   modal.classList.add("open");
   modal.setAttribute("aria-hidden", "false");
@@ -216,14 +254,10 @@ function openFromUrlIfAny() {
   const id = u.searchParams.get("open");
   if (!id) return;
 
-  const found = state.items.find(x => String(x.id) === String(id));
-  if (!found) return;
-
-  // fuerza render para que exista en filtered
   render();
   openModalById(id);
 
-  const el = document.getElementById(`item-${id}`);
+  const el = document.querySelector(`[data-id="${CSS.escape(id)}"]`);
   if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
 }
 
@@ -245,7 +279,37 @@ function prettyCat(cat) {
 }
 
 function escapeHtml(s) {
-  return String(s ?? "").replace(/[&<>"']/g, c => ({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  return String(s ?? "").replace(/[&<>"']/g, (c) => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;",
   }[c]));
+}
+
+/* ======================
+   Reveal animations
+====================== */
+let revealObserver;
+
+function setupReveal() {
+  revealObserver = new IntersectionObserver(
+    (entries) => {
+      for (const e of entries) {
+        if (e.isIntersecting) {
+          e.target.classList.add("is-visible");
+          revealObserver.unobserve(e.target);
+        }
+      }
+    },
+    { threshold: 0.12 }
+  );
+
+  document.querySelectorAll(".reveal").forEach(observeReveal);
+}
+
+function observeReveal(el) {
+  if (!revealObserver) return;
+  revealObserver.observe(el);
 }
