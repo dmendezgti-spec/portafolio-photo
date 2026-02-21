@@ -3,215 +3,265 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Portafolio | Fotografía</title>
-  <meta name="description" content="Bodas, prebodas y paisajes. Galería actualizada automáticamente desde Telegram." />
+  <title>Kutografic | Fotografía</title>
+  <meta name="description" content="Fotografía con estética cinematográfica. Bodas, prebodas y sesiones." />
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="./assets/styles.css?v=20" />
+
+  <link rel="stylesheet" href="./assets/styles.css?v=31" />
 </head>
 
 <body>
-  <!-- Topbar -->
-  <header class="topbar">
-    <div class="wrap topbar-inner">
-      <a class="brand" href="./" aria-label="Inicio">
-        <span class="brand-mark" aria-hidden="true">◈</span>
-        <span class="brand-text">
-          <span class="brand-name">Portafolio</span>
-          <span class="brand-sub">Bodas · Prebodas · Paisajes</span>
-        </span>
+  <!-- NAV -->
+  <header class="nav">
+    <div class="wrap nav-inner">
+      <a class="brand" href="#inicio" aria-label="Inicio">
+        <span class="brand-icon">📸</span>
+        <span class="brand-name">Kutografic</span>
       </a>
 
-      <nav class="nav" aria-label="Navegación">
-        <a class="nav-link" href="#galeria">Galería</a>
-        <a class="nav-link" href="#servicios">Servicios</a>
-        <a class="nav-link" href="#contacto">Contacto</a>
+      <nav class="menu">
+        <a href="#inicio" class="menu-link">Inicio</a>
+        <a href="#servicios" class="menu-link">Servicios</a>
+        <a href="#galeria" class="menu-link">Galería</a>
+        <a href="#contacto" class="menu-link">Contacto</a>
       </nav>
 
-      <div class="actions">
-        <button id="openWhatsApp" class="btn btn-ghost" type="button">WhatsApp</button>
-        <a class="btn btn-primary" href="#contacto">Cotizar</a>
+      <div class="nav-cta">
+        <a id="ctaWhatsAppTop" class="btn btn-wa" href="#" target="_blank" rel="noreferrer">
+          <span class="wa-dot" aria-hidden="true"></span> Cotizar
+        </a>
       </div>
     </div>
   </header>
 
-  <!-- Hero -->
-  <section class="hero">
-    <div class="hero-bg" aria-hidden="true"></div>
+  <!-- HERO -->
+  <section id="inicio" class="hero">
+    <div class="hero-bg" id="heroBg" aria-hidden="true"></div>
+    <div class="hero-overlay" aria-hidden="true"></div>
 
     <div class="wrap hero-inner">
-      <div class="hero-copy">
-        <div class="badge">Fotografía con estética cinematográfica</div>
+      <div class="hero-content reveal">
+        <div class="hero-kicker">Fotografía con estética cinematográfica</div>
 
-        <h1 class="hero-title">
-          Momentos reales,<br />
-          luz perfecta,<br />
-          recuerdos eternos.
-        </h1>
+        <h1 class="hero-title">Fotografía con estética cinematográfica</h1>
+
+        <p class="hero-subtitle">
+          <span class="gold">Momentos reales, luz perfecta, recuerdos eternos</span>
+        </p>
 
         <p class="hero-lead">
-          Cobertura de <b>bodas</b>, <b>prebodas</b> y sesiones en exteriores.
-          Galería actualizada desde Telegram.
+          Cobertura de <b>bodas</b>, <b>prebodas</b> y <b>sesiones</b> en exteriores.
+          Galería actualizada automáticamente desde Telegram.
         </p>
 
-        <div class="hero-cta">
-          <a class="btn btn-primary" href="#galeria">Ver galería</a>
-          <a class="btn btn-ghost" href="#servicios">Ver servicios</a>
+        <div class="hero-actions">
+          <a class="btn btn-gold" href="#galeria">Ver Galería</a>
+          <a class="btn btn-ghost" href="#contacto">Contactar</a>
         </div>
 
-        <div class="stats">
-          <div class="stat">
-            <div class="stat-num">+100</div>
-            <div class="stat-label">momentos capturados</div>
-          </div>
-          <div class="stat">
-            <div class="stat-num">4K</div>
-            <div class="stat-label">calidad y entrega</div>
-          </div>
-          <div class="stat">
-            <div class="stat-num">24h</div>
-            <div class="stat-label">respuesta rápida</div>
-          </div>
+        <div class="scroll-indicator" aria-hidden="true">
+          <div class="chev">⌄</div>
         </div>
       </div>
-
-      <aside class="hero-card" aria-label="Info">
-        <div class="hero-card-top">
-          <span class="pill pill-gold">Bodas</span>
-          <span class="pill">Preboda</span>
-          <span class="pill">Paisaje</span>
-        </div>
-
-        <div class="hero-card-title">Galería viva</div>
-        <p class="hero-card-desc">
-          Sube fotos y videos desde Telegram y el sitio se actualiza automáticamente.
-        </p>
-
-        <div class="divider"></div>
-
-        <div class="hint">
-          <span class="dot" aria-hidden="true"></span>
-          <span>Tip: caption “Título | Descripción” al enviar una foto.</span>
-        </div>
-      </aside>
     </div>
   </section>
 
-  <!-- Gallery -->
-  <main class="wrap">
-    <section id="galeria" class="section">
-      <div class="section-head">
-        <div>
-          <h2>Galería</h2>
-          <p class="muted">Filtra por categoría o busca por título/descripcion.</p>
-        </div>
+  <!-- METRICS -->
+  <section class="metrics">
+    <div class="wrap metrics-inner">
+      <div class="metric-card reveal">
+        <div class="metric-icon">🖼️</div>
+        <div class="metric-big">+100</div>
+        <div class="metric-label">MOMENTOS CAPTURADOS</div>
+      </div>
+
+      <div class="metric-card reveal" style="transition-delay:.08s">
+        <div class="metric-icon">🏅</div>
+        <div class="metric-big">4K</div>
+        <div class="metric-label">CALIDAD Y ENTREGA</div>
+      </div>
+
+      <div class="metric-card reveal" style="transition-delay:.16s">
+        <div class="metric-icon">⏱️</div>
+        <div class="metric-big">+24</div>
+        <div class="metric-label">RESPUESTA RÁPIDA (HRS)</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICIOS -->
+  <section id="servicios" class="section">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <h2 class="section-title">Servicios</h2>
+        <p class="section-sub">Especializado en capturar los momentos más importantes de tu vida</p>
+      </div>
+
+      <div class="service-grid">
+        <article class="service-card reveal">
+          <div class="service-top">
+            <div class="service-icon">💍</div>
+            <h3 class="service-title">Bodas</h3>
+          </div>
+          <p class="service-desc">
+            Cobertura completa de tu día especial, desde la preparación hasta la fiesta.
+            Capturamos cada emoción con narrativa visual.
+          </p>
+          <ul class="service-list">
+            <li>✔ Cobertura completa</li>
+            <li>✔ Fotos en alta resolución</li>
+            <li>✔ Edición profesional</li>
+            <li>✔ Galería online privada</li>
+          </ul>
+        </article>
+
+        <article class="service-card service-popular reveal" style="transition-delay:.08s">
+          <div class="popular-badge">Popular</div>
+          <div class="service-top">
+            <div class="service-icon">💛</div>
+            <h3 class="service-title">Prebodas</h3>
+          </div>
+          <p class="service-desc">
+            Sesiones románticas y únicas para inmortalizar el amor antes del gran día.
+            Locaciones especiales y dirección profesional.
+          </p>
+          <ul class="service-list">
+            <li>✔ Asesoría de locación</li>
+            <li>✔ Dirección profesional</li>
+            <li>✔ 2–3 horas de sesión</li>
+            <li>✔ Fotos seleccionadas editadas</li>
+          </ul>
+        </article>
+
+        <article class="service-card reveal" style="transition-delay:.16s">
+          <div class="service-top">
+            <div class="service-icon">👤</div>
+            <h3 class="service-title">Sesiones</h3>
+          </div>
+          <p class="service-desc">
+            Retratos profesionales, sesiones familiares, corporativas o temáticas.
+            Un ambiente relajado para lograr fotos naturales.
+          </p>
+          <ul class="service-list">
+            <li>✔ Sesiones personalizadas</li>
+            <li>✔ Ambiente relajado</li>
+            <li>✔ Edición artística</li>
+            <li>✔ Entrega digital rápida</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALERÍA -->
+  <section id="galeria" class="section">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <h2 class="section-title">Galería</h2>
+        <p class="section-sub">Explora mi trabajo y déjate inspirar</p>
+      </div>
+
+      <div class="filters reveal" style="transition-delay:.06s">
+        <button class="pill active" data-filter="all">Todos</button>
+        <button class="pill" data-filter="bodas">Bodas</button>
+        <button class="pill" data-filter="pre-bodas">Prebodas</button>
+        <button class="pill" data-filter="sesiones-fotograficas">Sesiones</button>
 
         <div class="search">
           <input id="search" type="search" placeholder="Buscar por título o descripción…" />
         </div>
       </div>
 
-      <div class="filters">
-        <button class="chip active" data-filter="all">Todos</button>
-        <button class="chip" data-filter="bodas">Bodas</button>
-        <button class="chip" data-filter="sesiones-fotograficas">Sesiones</button>
-        <button class="chip" data-filter="pre-bodas">Prebodas</button>
+      <div id="grid" class="gallery-grid"></div>
+    </div>
+  </section>
+
+  <!-- CONTACTO -->
+  <section id="contacto" class="section">
+    <div class="wrap">
+      <div class="contact-grid reveal">
+        <a id="ctaWhatsApp" class="btn btn-gold btn-wide" href="#" target="_blank" rel="noreferrer">
+          Hablar por WhatsApp
+        </a>
+
+        <form class="contact-card" onsubmit="return false;">
+          <label class="label">Selecciona un servicio</label>
+          <select class="input" id="serviceSelect">
+            <option value="Bodas">Bodas</option>
+            <option value="Prebodas">Prebodas</option>
+            <option value="Sesiones">Sesiones</option>
+          </select>
+
+          <label class="label">Cuéntame sobre tu proyecto</label>
+          <textarea class="input textarea" id="projectMsg" placeholder="Fecha, lugar, estilo, cantidad de horas..."></textarea>
+
+          <button id="sendMsg" class="btn btn-gold btn-wide" type="button">Enviar Mensaje ↗</button>
+        </form>
       </div>
 
-      <div id="grid" class="masonry" aria-live="polite"></div>
-    </section>
+      <footer class="footer">
+        <div class="foot-cols">
+          <div>
+            <div class="foot-brand">
+              <span class="brand-icon">📸</span>
+              <span class="brand-name">Kutografic</span>
+            </div>
+            <div class="foot-muted">Fotografía con estética cinematográfica</div>
+            <div class="social">
+              <a class="social-btn" href="#" aria-label="Instagram">◎</a>
+              <a class="social-btn" href="#" aria-label="Facebook">f</a>
+              <a class="social-btn" href="#" aria-label="WhatsApp">⌁</a>
+            </div>
+          </div>
 
-    <!-- Servicios -->
-    <section id="servicios" class="section">
-      <div class="section-head">
-        <div>
-          <h2>Servicios</h2>
-          <p class="muted">Paquetes flexibles según tu historia y estilo.</p>
-        </div>
-      </div>
+          <div>
+            <div class="foot-title">Enlaces Rápidos</div>
+            <a class="foot-link" href="#inicio">Inicio</a>
+            <a class="foot-link" href="#servicios">Servicios</a>
+            <a class="foot-link" href="#galeria">Galería</a>
+            <a class="foot-link" href="#contacto">Contacto</a>
+          </div>
 
-      <div class="cards">
-        <div class="info-card">
-          <div class="info-title">Bodas</div>
-          <div class="info-text">Cobertura completa, detalles, ceremonia y fiesta. Entrega optimizada.</div>
-          <div class="info-tags">
-            <span class="tag">Cobertura</span><span class="tag">Retratos</span><span class="tag">Detalles</span>
+          <div>
+            <div class="foot-title">Servicios</div>
+            <div class="foot-muted">Bodas</div>
+            <div class="foot-muted">Prebodas</div>
+            <div class="foot-muted">Sesiones</div>
+          </div>
+
+          <div>
+            <div class="foot-title">Contacto</div>
+            <div class="foot-muted">+56 9 XXXXXXXX</div>
+            <div class="foot-muted">contacto@tudominio.com</div>
           </div>
         </div>
 
-        <div class="info-card">
-          <div class="info-title">Prebodas</div>
-          <div class="info-text">Sesión en exteriores, natural y cinematográfica. Ideal para invitaciones.</div>
-          <div class="info-tags">
-            <span class="tag">Outdoors</span><span class="tag">Cine</span><span class="tag">Storytelling</span>
-          </div>
-        </div>
+        <div class="foot-line"></div>
+        <div class="foot-bottom">© <span id="year"></span> Kutografic. Todos los derechos reservados.</div>
+      </footer>
+    </div>
+  </section>
 
-        <div class="info-card">
-          <div class="info-title">Paisajes</div>
-          <div class="info-text">Fotografía de lugares, luz y atmósfera. Perfecta para portafolio y redes.</div>
-          <div class="info-tags">
-            <span class="tag">Luz</span><span class="tag">Color</span><span class="tag">Atmósfera</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Contacto -->
-    <section id="contacto" class="section contact">
-      <div class="contact-card">
-        <div>
-          <h2>¿Cotizamos tu sesión?</h2>
-          <p class="muted">Cuéntame fecha, lugar y estilo. Respondo rápido.</p>
-        </div>
-
-        <div class="contact-actions">
-          <a class="btn btn-primary" id="contactWhatsApp" href="#" rel="noreferrer">Hablar por WhatsApp</a>
-          <a class="btn btn-ghost" href="#galeria">Volver a la galería</a>
-        </div>
-      </div>
-    </section>
-
-    <footer class="footer">
-      <div class="muted">© <span id="year"></span> Portafolio Fotografía · Actualizado desde Telegram</div>
-    </footer>
-  </main>
-
-  <!-- Modal -->
+  <!-- MODAL -->
   <div id="modal" class="modal" aria-hidden="true">
     <div class="modal-card" role="dialog" aria-modal="true">
       <button id="modalClose" class="modal-close" aria-label="Cerrar">✕</button>
-
-      <button id="modalPrev" class="nav-arrow left" aria-label="Anterior">‹</button>
-      <button id="modalNext" class="nav-arrow right" aria-label="Siguiente">›</button>
-
+      <button id="modalPrev" class="modal-arrow left" aria-label="Anterior">‹</button>
+      <button id="modalNext" class="modal-arrow right" aria-label="Siguiente">›</button>
       <div id="modalMedia" class="modal-media"></div>
-
       <div class="modal-foot">
-        <div class="modal-foot-text">
+        <div>
           <div id="modalTitle" class="modal-title">Título</div>
           <div id="modalMeta" class="modal-meta">Categoría · Fecha</div>
           <div id="modalDesc" class="modal-desc"></div>
         </div>
-        <a id="modalOpen" class="btn btn-ghost" target="_blank" rel="noreferrer">Abrir original</a>
+        <a id="modalOpen" class="btn btn-ghost" target="_blank" rel="noreferrer">Abrir</a>
       </div>
     </div>
   </div>
 
-  <script src="./assets/app.js?v=20"></script>
-  <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
-
-    // WhatsApp (cambia el número)
-    const phone = "56900000000"; // +56 9 XXXXXXXX
-    const msg = encodeURIComponent("Hola! Quiero cotizar una sesión 📸");
-    const wa = `https://wa.me/${phone}?text=${msg}`;
-
-    const openWhatsApp = document.getElementById("openWhatsApp");
-    const contactWhatsApp = document.getElementById("contactWhatsApp");
-    if (openWhatsApp) openWhatsApp.onclick = () => window.open(wa, "_blank");
-    if (contactWhatsApp) contactWhatsApp.href = wa;
-  </script>
+  <script src="./assets/app.js?v=31"></script>
 </body>
 </html>
