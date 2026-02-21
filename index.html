@@ -4,30 +4,32 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Portafolio | Fotografía</title>
+  <meta name="description" content="Bodas, prebodas y paisajes. Galería actualizada automáticamente desde Telegram." />
 
-  <!-- IMPORTANTE: ahora están en /assets -->
-  <link rel="stylesheet" href="./assets/styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="./assets/styles.css?v=20" />
 </head>
 
 <body>
   <!-- Topbar -->
   <header class="topbar">
     <div class="wrap topbar-inner">
-      <a class="logo" href="./">
-        <span class="logo-mark">◈</span>
-        <span class="logo-text">
-          <span class="logo-title">Portafolio</span>
-          <span class="logo-sub">Bodas · Prebodas · Paisajes</span>
+      <a class="brand" href="./" aria-label="Inicio">
+        <span class="brand-mark" aria-hidden="true">◈</span>
+        <span class="brand-text">
+          <span class="brand-name">Portafolio</span>
+          <span class="brand-sub">Bodas · Prebodas · Paisajes</span>
         </span>
       </a>
 
-      <nav class="nav">
+      <nav class="nav" aria-label="Navegación">
         <a class="nav-link" href="#galeria">Galería</a>
-        <a class="nav-link" href="#categorias">Categorías</a>
+        <a class="nav-link" href="#servicios">Servicios</a>
         <a class="nav-link" href="#contacto">Contacto</a>
       </nav>
 
-      <div class="topbar-actions">
+      <div class="actions">
         <button id="openWhatsApp" class="btn btn-ghost" type="button">WhatsApp</button>
         <a class="btn btn-primary" href="#contacto">Cotizar</a>
       </div>
@@ -36,51 +38,63 @@
 
   <!-- Hero -->
   <section class="hero">
+    <div class="hero-bg" aria-hidden="true"></div>
+
     <div class="wrap hero-inner">
       <div class="hero-copy">
-        <p class="kicker">Fotografía con estética cinematográfica</p>
-        <h1>Momentos reales, luz perfecta, recuerdos eternos.</h1>
-        <p class="lead">
-          Cobertura de <b>bodas</b>, <b>prebodas</b> y sesiones en exteriores. Galería actualizada desde Telegram.
+        <div class="badge">Fotografía con estética cinematográfica</div>
+
+        <h1 class="hero-title">
+          Momentos reales,<br />
+          luz perfecta,<br />
+          recuerdos eternos.
+        </h1>
+
+        <p class="hero-lead">
+          Cobertura de <b>bodas</b>, <b>prebodas</b> y sesiones en exteriores.
+          Galería actualizada desde Telegram.
         </p>
 
         <div class="hero-cta">
           <a class="btn btn-primary" href="#galeria">Ver galería</a>
-          <a class="btn btn-ghost" href="#categorias">Explorar categorías</a>
+          <a class="btn btn-ghost" href="#servicios">Ver servicios</a>
         </div>
 
-        <div class="hero-metrics">
-          <div class="metric">
-            <div class="metric-num">+100</div>
-            <div class="metric-label">momentos capturados</div>
+        <div class="stats">
+          <div class="stat">
+            <div class="stat-num">+100</div>
+            <div class="stat-label">momentos capturados</div>
           </div>
-          <div class="metric">
-            <div class="metric-num">4K</div>
-            <div class="metric-label">calidad y entrega</div>
+          <div class="stat">
+            <div class="stat-num">4K</div>
+            <div class="stat-label">calidad y entrega</div>
           </div>
-          <div class="metric">
-            <div class="metric-num">24h</div>
-            <div class="metric-label">respuesta rápida</div>
+          <div class="stat">
+            <div class="stat-num">24h</div>
+            <div class="stat-label">respuesta rápida</div>
           </div>
         </div>
       </div>
 
-      <div class="hero-card">
+      <aside class="hero-card" aria-label="Info">
         <div class="hero-card-top">
           <span class="pill pill-gold">Bodas</span>
           <span class="pill">Preboda</span>
           <span class="pill">Paisaje</span>
         </div>
+
         <div class="hero-card-title">Galería viva</div>
-        <div class="hero-card-desc">
+        <p class="hero-card-desc">
           Sube fotos y videos desde Telegram y el sitio se actualiza automáticamente.
+        </p>
+
+        <div class="divider"></div>
+
+        <div class="hint">
+          <span class="dot" aria-hidden="true"></span>
+          <span>Tip: caption “Título | Descripción” al enviar una foto.</span>
         </div>
-        <div class="hero-card-line"></div>
-        <div class="hero-card-mini">
-          <div class="dot"></div>
-          <div>Tip: usa “Título | Descripción” en la foto.</div>
-        </div>
-      </div>
+      </aside>
     </div>
   </section>
 
@@ -98,21 +112,59 @@
         </div>
       </div>
 
-      <div id="categorias" class="filters">
+      <div class="filters">
         <button class="chip active" data-filter="all">Todos</button>
         <button class="chip" data-filter="bodas">Bodas</button>
         <button class="chip" data-filter="sesiones-fotograficas">Sesiones</button>
         <button class="chip" data-filter="pre-bodas">Prebodas</button>
       </div>
 
-      <div id="grid" class="grid"></div>
+      <div id="grid" class="masonry" aria-live="polite"></div>
     </section>
 
-    <!-- Contact -->
+    <!-- Servicios -->
+    <section id="servicios" class="section">
+      <div class="section-head">
+        <div>
+          <h2>Servicios</h2>
+          <p class="muted">Paquetes flexibles según tu historia y estilo.</p>
+        </div>
+      </div>
+
+      <div class="cards">
+        <div class="info-card">
+          <div class="info-title">Bodas</div>
+          <div class="info-text">Cobertura completa, detalles, ceremonia y fiesta. Entrega optimizada.</div>
+          <div class="info-tags">
+            <span class="tag">Cobertura</span><span class="tag">Retratos</span><span class="tag">Detalles</span>
+          </div>
+        </div>
+
+        <div class="info-card">
+          <div class="info-title">Prebodas</div>
+          <div class="info-text">Sesión en exteriores, natural y cinematográfica. Ideal para invitaciones.</div>
+          <div class="info-tags">
+            <span class="tag">Outdoors</span><span class="tag">Cine</span><span class="tag">Storytelling</span>
+          </div>
+        </div>
+
+        <div class="info-card">
+          <div class="info-title">Paisajes</div>
+          <div class="info-text">Fotografía de lugares, luz y atmósfera. Perfecta para portafolio y redes.</div>
+          <div class="info-tags">
+            <span class="tag">Luz</span><span class="tag">Color</span><span class="tag">Atmósfera</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contacto -->
     <section id="contacto" class="section contact">
       <div class="contact-card">
-        <h2>¿Cotizamos tu sesión?</h2>
-        <p class="muted">Cuéntame fecha, lugar y estilo. Respondo rápido.</p>
+        <div>
+          <h2>¿Cotizamos tu sesión?</h2>
+          <p class="muted">Cuéntame fecha, lugar y estilo. Respondo rápido.</p>
+        </div>
 
         <div class="contact-actions">
           <a class="btn btn-primary" id="contactWhatsApp" href="#" rel="noreferrer">Hablar por WhatsApp</a>
@@ -128,26 +180,31 @@
 
   <!-- Modal -->
   <div id="modal" class="modal" aria-hidden="true">
-    <div class="modal-card">
-      <div class="modal-head">
-        <div>
+    <div class="modal-card" role="dialog" aria-modal="true">
+      <button id="modalClose" class="modal-close" aria-label="Cerrar">✕</button>
+
+      <button id="modalPrev" class="nav-arrow left" aria-label="Anterior">‹</button>
+      <button id="modalNext" class="nav-arrow right" aria-label="Siguiente">›</button>
+
+      <div id="modalMedia" class="modal-media"></div>
+
+      <div class="modal-foot">
+        <div class="modal-foot-text">
           <div id="modalTitle" class="modal-title">Título</div>
           <div id="modalMeta" class="modal-meta">Categoría · Fecha</div>
+          <div id="modalDesc" class="modal-desc"></div>
         </div>
-        <button id="modalClose" class="modal-close" aria-label="Cerrar">✕</button>
+        <a id="modalOpen" class="btn btn-ghost" target="_blank" rel="noreferrer">Abrir original</a>
       </div>
-      <div id="modalBody" class="modal-body"></div>
     </div>
   </div>
 
-  <!-- IMPORTANTE: ahora está en /assets -->
-  <script src="./assets/app.js"></script>
-
+  <script src="./assets/app.js?v=20"></script>
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();
 
     // WhatsApp (cambia el número)
-    const phone = "56900000000";
+    const phone = "56900000000"; // +56 9 XXXXXXXX
     const msg = encodeURIComponent("Hola! Quiero cotizar una sesión 📸");
     const wa = `https://wa.me/${phone}?text=${msg}`;
 
